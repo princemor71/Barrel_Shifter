@@ -1,0 +1,27 @@
+
+// module code 
+
+module barriel_shift#(parameter width=8)(
+input clk,
+input rst,
+input [1:0]mode,
+input [$clog2(width)-1:0]shift_bit,
+input [width-1:0]data_in,
+output reg [width-1:0]data_out
+);
+always @(posedge clk or posedge rst)begin
+if(rst)begin
+data_out<=0;
+end
+else begin
+
+case(mode)
+2'b00:data_out<=data_in<<shift_bit;// logic left
+2'b01:data_out<=data_in>>shift_bit;// logic right
+2'b10:data_out<=data_in<<shift_bit | (data_in>>(width-shift_bit));// left shift
+2'b11:data_out<=data_in>>shift_bit | (data_in<<(width-shift_bit));// right shift
+endcase
+end
+end
+
+endmodule
